@@ -52,7 +52,7 @@ class LoginMixin(object):
 
     def login_user(self, request, user):
         anonymous_session_data = dict(request.session.items())
-        if not user.backend:
+        if not getattr(user, 'backend', None):
             #user must be annotated with backend, for auto login we can use first available
             for backend in get_backends():
                 if not user.is_active:
