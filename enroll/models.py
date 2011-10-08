@@ -77,7 +77,7 @@ def post_key_create(sender, **kwargs):
         site = Site.objects.get_current()
         if token.verification_type == VerificationToken.TYPE_SIGN_UP:
             subject = _("%s: user registration confirmation") % site.name
-            template =  'enroll/activation_email.txt'
+            template =  'enroll/signup_email.html'
         elif token.verification_type == VerificationToken.TYPE_PASSWORD_RESET:
             subject = _("%s: passwotd reset") % site.name
             template =  'enroll/password_reset_email.html'
