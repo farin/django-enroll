@@ -295,7 +295,7 @@ class LoginView(LoginMixin, FormView):
 
 class LogoutView(TemplateView):
     url = getattr(settings, 'LOGOUT_REDIRECT_URL')
-    template_name = 'registration/logged_out.html'
+    template_name = 'enroll/logged_out.html'
     redirect_field_name = REDIRECT_FIELD_NAME
 
     def get_redirect_url(self, **kwargs):
