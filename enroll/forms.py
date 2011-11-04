@@ -142,6 +142,9 @@ class SignUpForm(PasswordFormMixin, BaseSignUpForm):
 
 
 class RequestPassingAuthenticationForm(RequestAcceptingForm, DjangoAuthenticationForm):
+
+    username = forms.CharField(label=_("Username")) #no max length
+
     """
         Pass request to backend.
         Also patched to allow login by inactive users. Maybe it will be fixed in Django 1.3
