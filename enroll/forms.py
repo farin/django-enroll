@@ -82,7 +82,7 @@ class BaseSignUpForm(RequestAcceptingModelForm):
         fields = getattr(settings , 'ENROLL_SIGNUP_FORM_USER_FIELDS', ('username', 'email'))
 
     def create_verification_token(self, user, email):
-        return VerificationToken.objects.create_token(user, verification_type=VerificationToken.TYPE_SIGN_UP, email=email)
+        return VerificationToken.objects.create_token(user, self.request.LANGUAGE_CODE, verification_type=VerificationToken.TYPE_SIGN_UP, email=email)
 
     def get_username(self, cleaned_data):
         """User email as username if username field is not present"""
@@ -185,7 +185,7 @@ class PasswordResetStepOneForm(RequestAcceptingForm):
         return email
 
     def create_verification_token(self, user):
-        return VerificationToken.objects.create_token(user, verification_type=VerificationToken.TYPE_PASSWORD_RESET)
+        return VerificationToken.objects.create_token(user, self.request.LANGUAGE_CODE, verification_type=VerificationToken.TYPE_PASSWORD_RESET)
 
     def save(self):
         for user in self.users_cache:
@@ -234,7 +234,7 @@ class ChangeEmailForm(RequestAcceptingForm):
     }
 
     def create_verification_token(self, user, email):
-        return VerificationToken.objects.create_token(user, verification_type=VerificationToken.TYPE_EMAIL_CHANGE, email=email)
+        return VerificationToken.objects.create_token(user, self.request.LANGUAGE_CODE, verification_type=VerificationToken.TYPE_EMAIL_CHANGE, email=email)
 
     def save(self):
         self.create_verification_token(self.request.user, self.cleaned_data['email'])

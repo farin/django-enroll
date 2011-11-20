@@ -14,7 +14,7 @@ from django.db.models.signals import post_save
 
 class VerificationTokenManager(models.Manager):
 
-    def create_token(self, user, verification_type, email=None, account_activation_days=None):
+    def create_token(self, user, language, verification_type, email=None, account_activation_days=None):
         salt = str(random.random())
         key = sha_constructor(salt+user.username.encode('ascii', 'ignore')).hexdigest()
         key = key[:getattr(settings, 'ENROLL_VERIFICATION_TOKEN_LENGTH', 12)]
@@ -26,7 +26,7 @@ class VerificationTokenManager(models.Manager):
             expire_date = datetime.now() + timedelta(days=account_activation_days)
         else:
             expire_date = None
-        return self.create(user=user, verification_type=verification_type, email=email, key=key, expire_date=expire_date)
+        return self.create(user=user, language=language, verification_type=verification_type, email=email, key=key, expire_date=expire_date)
 
 
 class VerificationToken(models.Model):
@@ -46,6 +46,7 @@ class VerificationToken(models.Model):
     expire_date = models.DateTimeField(null=True, blank=True)
     verification_type = models.CharField(max_length=1, choices=VERIFICATION_TYPE_CHOICES)
     email = models.EmailField(_('e-mail address'), null=True, blank=True)
+    language = models.CharField(_("Language"), max_length=2, choices=settings.LANGUAGES, null=True, blank=True)
 
     objects = VerificationTokenManager()
 
@@ -64,7 +65,7 @@ class VerificationToken(models.Model):
             'expire_date': self.expire_date,
             'site': Site.objects.get_current(),
         })
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.user.email])
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email or self.user.email])
 
 
 """ To override notification behavior, set settings.ENROLL_SEND_VERIFICATION_EMAIL to False
