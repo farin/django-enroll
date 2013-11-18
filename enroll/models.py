@@ -1,10 +1,10 @@
 import random
 from datetime import datetime, timedelta
+from hashlib import sha1
 
 from django.db import models
 from django.core.mail import send_mail
 from django.template import loader
-from django.utils.hashcompat import sha_constructor
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -16,7 +16,7 @@ class VerificationTokenManager(models.Manager):
 
     def create_token(self, user, language, verification_type, email=None, account_activation_days=None):
         salt = str(random.random())
-        key = sha_constructor(salt+user.username.encode('ascii', 'ignore')).hexdigest()
+        key = sha1(salt+user.username.encode('ascii', 'ignore')).hexdigest()
         key = key[:getattr(settings, 'ENROLL_VERIFICATION_TOKEN_LENGTH', 12)]
 
         if account_activation_days is None: #can be False
