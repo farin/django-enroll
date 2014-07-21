@@ -6,11 +6,11 @@ from django.db import models
 from django.core.mail import send_mail
 from django.template import loader
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.conf import settings
 from django.dispatch.dispatcher import receiver
 from django.db.models.signals import post_save
+from django.contrib.auth import get_user_model
 
 class VerificationTokenManager(models.Manager):
 
@@ -41,7 +41,7 @@ class VerificationToken(models.Model):
         (TYPE_PASSWORD_RESET, _('Password reset')),
     ]
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(get_user_model())
     key = models.CharField(_('activation key'), max_length=40)
     expire_date = models.DateTimeField(null=True, blank=True)
     verification_type = models.CharField(max_length=1, choices=VERIFICATION_TYPE_CHOICES)

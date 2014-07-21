@@ -1,7 +1,7 @@
 import string, re
 
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.validators import RegexValidator
@@ -20,7 +20,7 @@ class UniqueUsernameValidator(object):
     def __call__(self, value):
         #import traceback
         #traceback.print_stack()
-        if User.objects.filter(username__iexact=value.strip()).count():
+        if get_user_model().objects.filter(username__iexact=value.strip()).count():
             raise ValidationError(self.message)
 
 
@@ -29,7 +29,7 @@ class UniqueEmailValidator(object):
     message = _(u'This email address is already in use. Please supply a different email address.')
 
     def __call__(self, value):
-        if User.objects.filter(email__iexact=value.strip()).count():
+        if get_user_model().objects.filter(email__iexact=value.strip()).count():
             raise ValidationError(self.message)
 
 

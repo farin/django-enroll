@@ -1,10 +1,10 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.forms.models import ModelFormMetaclass
 from django.contrib.auth.forms import AuthenticationForm as DjangoAuthenticationForm
 from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
 
 from enroll.models import VerificationToken
 from enroll.validators import UniqueUsernameValidator, UniqueEmailValidator
@@ -78,7 +78,7 @@ class BaseSignUpForm(RequestAcceptingModelForm):
     field_validators = getattr(settings , 'ENROLL_FORM_VALIDATORS', DEFAULT_FORM_VALIDATORS)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = getattr(settings , 'ENROLL_SIGNUP_FORM_USER_FIELDS', ('username', 'email'))
 
     def create_verification_token(self, user, email):
@@ -94,7 +94,7 @@ class BaseSignUpForm(RequestAcceptingModelForm):
         email = self.cleaned_data.get('email')
         username = self.get_username(self.cleaned_data)
 
-        user = User.objects.create_user(username, email, password)
+        user = get_user_model().objects.create_user(username, email, password)
 
         if self.auto_verify_user:
             token = None
@@ -179,7 +179,7 @@ class PasswordResetStepOneForm(RequestAcceptingForm):
         email = self.cleaned_data["email"]
         if email:
             email = email.strip()
-            self.users_cache = User.objects.filter(email__iexact=email)
+            self.users_cache = get_user_model().objects.filter(email__iexact=email)
             if len(self.users_cache) == 0:
                 raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
         return email

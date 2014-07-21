@@ -1,5 +1,5 @@
 from django.contrib.auth.backends import ModelBackend as DjangoModelBackend
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db.models.query_utils import Q
 from django.conf import settings
 
@@ -17,7 +17,7 @@ class ModelBackend(DjangoModelBackend):
         for login_attr in self.login_attributes:
             q = Q(**{login_attr: login})
             combined = q if combined is None else combined | q
-        return User.objects.get(combined)
+        return get_user_model().objects.get(combined)
 
     def authenticate_user(self, user, password, request=None):
         return user if user.check_password(password) else None
@@ -26,7 +26,7 @@ class ModelBackend(DjangoModelBackend):
         try:
             user = self.find_user_by_login(username)
             return self.authenticate_user(user, password, request)
-        except User.DoesNotExist:
+        except get_user_model().DoesNotExist:
             return None
 
 
