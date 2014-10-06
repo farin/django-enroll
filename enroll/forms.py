@@ -168,7 +168,7 @@ class RequestPassingAuthenticationForm(RequestAcceptingForm, DjangoAuthenticatio
                 raise forms.ValidationError(_("Please enter a correct username and password. Note that both fields are case-sensitive."))
             elif not self.supports_inactive_user and not self.user_cache.is_active:
                 raise forms.ValidationError(_("This account is inactive."))
-        self.check_for_test_cookie()
+        #self.check_for_test_cookie()
         return self.cleaned_data
 
 
