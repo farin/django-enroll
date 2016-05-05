@@ -1,0 +1,106 @@
+Metadata-Version: 1.1
+Name: django-enroll
+Version: 0.3
+Summary: Flexible user registration and user account management for Django
+Home-page: http://github.org/comoga/django-enroll
+Author: Comoga Django Team
+Author-email: dev@comoga.cz
+License: BSD
+Description: Features
+        ========
+        
+        Djnago-enroll is inspired with django-registration.
+        
+        Motivation to create new user registration library is to provide
+        more flexible app with easily configurable behavior and ability
+        to easy override of any part.
+        
+        To fulfill such aim new Django classed base views are very helpful.
+        So django-enroll requires Django 1.3 (it means trunk development version nowadays).
+        
+        Installation
+        ============
+        
+        
+        Functionality overriding
+        ========================
+        
+        Todo refactoring, because ...
+        "There should be one-- and preferably only one --obvious way to do it."
+        
+        There are three ways to change django-enroll default functionality.
+        
+        1. passing argument to classed based view (usually from URL mapping)
+        This is Django classed base view feature. It allows change any class property
+        by passing new value to constructor kwargs. (see Django classed base view documentation)
+        
+        2. Set proper variable in your settings.py (see settings section)
+        
+        3. Override view class. The most complex but the most flexible way.
+        
+        
+        Views
+        =====
+        
+        Supports django.contrib.messages - see  SuccessMessageMixin, FailureMessageMixin
+        
+        Form views can end (on success) with redirect or display template.
+        
+        SignUpView
+        VerifyAccountView
+        LoginView
+        LogoutView
+        PasswordResetView
+        VerifyPasswordResetView
+        
+        Settings variables
+        ==================
+        
+        All settings are optional. Defaults are:
+        
+        ::
+        
+            ENROLL_SIGNUP_FORM_USER_FIELDS = ('username', 'email')
+            ENROLL_FORM_VALIDATORS = {
+                'username': [
+                    'enroll.validators.UniqueUsernameValidator'
+                ],
+                'email': [
+                    'enroll.validators.UniqueEmailValidator'
+                ],
+            } #used by SignUpForm and PasswordResetForm (if contains password validator)
+        
+            ENROLL_EMAIL_BANNED_DOMAINS = []     #(enable EmailDomainValidator to have effect)
+            ENROLL_PASSWORD_MIN_LENGTH = 4
+            ENROLL_FORBIDDEN_PASSWORDS = []      #(enable TooSimplePasswordValidator to have effect)
+            ENROLL_FORBID_USERNAME_DERIVED_PASSWORD = False
+        
+            ENROLL_AUTH_BACKEND_LOGIN_ATTRIBUTES  = [ username ]  #(use enroll.backends.ModelBackend to have effect)
+            ENROLL_AUTH_BACKEND_INACTIVE_USER = True  #is allowed login authentication by inactive user
+        
+            ENROLL_VERIFICATION_TOKEN_VALID_DAYS = 14 #unlimited if False
+            ENROLL_VERIFICATION_TOKEN_LENGTH = 12
+            ENROLL_SEND_VERIFICATION_EMAIL = True
+            ENROLL_AUTO_LOGIN = True
+            ENROLL_AUTO_VERIFY = False
+        
+            LOGIN_REDIRECT_URL #(also used by django auth)
+            LOGOUT_REDIRECT_URL
+        
+        
+        TODO
+        ====
+        
+        define success_message directly in enroll for classes for all SuccessMessageMixin mixins
+        Password change usecase.
+Keywords: django,libraries,signin,registration,user,account
+Platform: any
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Utilities

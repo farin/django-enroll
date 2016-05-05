@@ -7,7 +7,7 @@ from django.views.generic.base import TemplateResponseMixin, View, TemplateView
 from django.contrib.auth import login as auth_login, get_backends
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.conf import settings
-from django.contrib.sites.models import get_current_site
+from django.contrib.sites.shortcuts import get_current_site
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.utils.translation import ugettext_lazy as _
