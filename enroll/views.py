@@ -299,7 +299,7 @@ class LogoutView(TemplateView):
     redirect_field_name = REDIRECT_FIELD_NAME
 
     def get_redirect_url(self, **kwargs):
-        return self.request.REQUEST.get(self.redirect_field_name, self.url)
+        return self.request.GET.get(self.redirect_field_name, self.url)
 
     def get_context_data(self, **kwargs):
         current_site = get_current_site(self.request)
